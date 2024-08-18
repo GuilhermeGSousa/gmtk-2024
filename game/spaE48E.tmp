@@ -1,0 +1,86 @@
+[gd_scene load_steps=11 format=3 uid="uid://dsv0dai7ivv4i"]
+
+[ext_resource type="Script" path="res://scripts/camera/camera_targeter.gd" id="2_00qkx"]
+[ext_resource type="Texture2D" uid="uid://d2jxec8qvt6qq" path="res://sprites/shapes/triangle.png" id="2_b14yk"]
+[ext_resource type="Texture2D" uid="uid://bvtsxwnb2ou8v" path="res://sprites/shapes/circle.png" id="3_k6c2h"]
+[ext_resource type="Script" path="res://game/spaceship.gd" id="3_whq62"]
+[ext_resource type="Script" path="res://game/gravity_field.gd" id="5_bv2sw"]
+
+[sub_resource type="Curve" id="Curve_0tuti"]
+_data = [Vector2(0, 0.986359), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5vqt"]
+size = Vector2(65, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_52ktn"]
+radius = 36.95
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fy168"]
+radius = 3000.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_62mxv"]
+radius = 776.62
+
+[node name="Space" type="Node2D"]
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 69.685, 0, 172, 46, 258, -33, 349, -94)
+width_curve = SubResource("Curve_0tuti")
+default_color = Color(0, 0, 0.988235, 1)
+
+[node name="CameraTargeter" type="Node" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("2_00qkx")
+camera = NodePath("../Camera2D")
+min_zoom = 0.895
+max_zoom = 0.235
+targets = Array[NodePath]([NodePath("../Spaceship"), NodePath("../Planet")])
+
+[node name="Spaceship" type="RigidBody2D" parent="." node_paths=PackedStringArray("trajectory")]
+position = Vector2(424, 406)
+mass = 0.1
+gravity_scale = 0.0
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("3_whq62")
+thrust = 10.0
+trajectory = NodePath("../Line2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spaceship"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_i5vqt")
+
+[node name="Sprite2D" type="Sprite2D" parent="Spaceship"]
+texture = ExtResource("2_b14yk")
+
+[node name="PlanetDetector" type="Area2D" parent="Spaceship"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spaceship/PlanetDetector"]
+shape = SubResource("CircleShape2D_52ktn")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(615, 865)
+zoom = Vector2(0.235, 0.235)
+
+[node name="Planet" type="StaticBody2D" parent="."]
+position = Vector2(806, 1324)
+
+[node name="GravityField" type="Area2D" parent="Planet"]
+script = ExtResource("5_bv2sw")
+planet_gravity = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Planet/GravityField"]
+scale = Vector2(0.985888, 0.995109)
+shape = SubResource("CircleShape2D_fy168")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Planet"]
+position = Vector2(4, 0)
+shape = SubResource("CircleShape2D_62mxv")
+
+[node name="Sprite2D" type="Sprite2D" parent="Planet/CollisionShape2D"]
+scale = Vector2(15.5143, 15.3841)
+texture = ExtResource("3_k6c2h")
+
+[connection signal="area_entered" from="Spaceship/PlanetDetector" to="Spaceship" method="_on_planet_detector_area_entered"]
+[connection signal="body_entered" from="Planet/GravityField" to="Planet/GravityField" method="_on_gravity_field_body_entered"]
+[connection signal="body_exited" from="Planet/GravityField" to="Planet/GravityField" method="_on_gravity_field_body_exited"]

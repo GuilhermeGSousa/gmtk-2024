@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cfqjlvicb2ymt"]
+[gd_scene load_steps=3 format=3 uid="uid://cfqjlvicb2ymt"]
 
 [ext_resource type="Script" path="res://scripts/audio/audio_manager.gd" id="1_cj6qi"]
+[ext_resource type="AudioStream" uid="uid://bq1m3f5bvqbco" path="res://game/sfx/song.mp3" id="2_xx48g"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_cj6qi")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_xx48g")
+autoplay = true
+bus = &"Music"
+parameters/looping = true

@@ -1,6 +1,7 @@
 class_name CameraArea extends Area2D
 
 @export var trigger_group: String = "player"
+@export var deactivate_on_exit = true
 @export var area_enter: CameraAreaEvent
 @export var area_exit: CameraAreaEvent
 
@@ -54,6 +55,7 @@ func _on_area_entered(area: Area2D):
 	
 func _on_area_exited(area: Area2D):
 	if not area.is_in_group(trigger_group): return
+	if not deactivate_on_exit : return
 	_is_active = false
 	if area_exit: area_exit.trigger(self)
 	

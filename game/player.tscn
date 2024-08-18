@@ -1,0 +1,182 @@
+[gd_scene load_steps=22 format=3 uid="uid://xdi8flrfu1d1"]
+
+[ext_resource type="Script" path="res://game/astronaut.gd" id="1_a2dhs"]
+[ext_resource type="Script" path="res://scripts/interaction/interactor.gd" id="2_2oyhr"]
+[ext_resource type="Texture2D" uid="uid://rsrrbtsxkrlr" path="res://game/assets/player_face_right.PNG" id="3_csrx2"]
+[ext_resource type="Texture2D" uid="uid://ccq3xuqof6j51" path="res://game/assets/jetpack-smoke.PNG" id="4_edddd"]
+[ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="5_62oef"]
+[ext_resource type="AudioStream" uid="uid://bxw8k0gs1t2pm" path="res://game/sfx/thrust.wav" id="5_sgchb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pumqc"]
+radius = 20.0
+height = 128.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_djft3"]
+radius = 96.19
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_peorb"]
+radius = 96.19
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0u4x4"]
+shader = ExtResource("5_62oef")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdaam"]
+shader = ExtResource("5_62oef")
+shader_parameter/normal_offset = 5.0
+shader_parameter/time_influence = 1.5
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 7.7
+
+[sub_resource type="Animation" id="Animation_iyngt"]
+resource_name = "right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5p25j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_t7tol"]
+resource_name = "left"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nallm"]
+_data = {
+"RESET": SubResource("Animation_5p25j"),
+"left": SubResource("Animation_t7tol"),
+"right": SubResource("Animation_iyngt")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ookcc"]
+animation = &"left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b02y3"]
+animation = &"right"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_px1tf"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_67ayl"]
+xfade_time = 0.5
+advance_mode = 2
+advance_expression = "get_horizontal_input() < 0"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sajgf"]
+xfade_time = 0.5
+advance_mode = 2
+advance_expression = "get_horizontal_input() > 0"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ayi0c"]
+states/Start/position = Vector2(240, 82)
+states/left/node = SubResource("AnimationNodeAnimation_ookcc")
+states/left/position = Vector2(676, 82)
+states/right/node = SubResource("AnimationNodeAnimation_b02y3")
+states/right/position = Vector2(449, 82)
+transitions = ["Start", "right", SubResource("AnimationNodeStateMachineTransition_px1tf"), "right", "left", SubResource("AnimationNodeStateMachineTransition_67ayl"), "left", "right", SubResource("AnimationNodeStateMachineTransition_sajgf")]
+
+[node name="Player" type="RigidBody2D" node_paths=PackedStringArray("jetpack") groups=["Saveable"]]
+z_index = 1
+collision_mask = 8
+mass = 0.01
+gravity_scale = 0.0
+lock_rotation = true
+continuous_cd = 2
+script = ExtResource("1_a2dhs")
+vertical_thrust = 0.05
+horizontal_thrust = 0.1
+max_speed = 20.0
+jetpack = NodePath("Sprite2D/JetpackVertical")
+
+[node name="PlayerCapsule" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_pumqc")
+
+[node name="ShipInteractor" type="Area2D" parent="." groups=["player"]]
+collision_mask = 65
+script = ExtResource("2_2oyhr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShipInteractor"]
+shape = SubResource("CircleShape2D_djft3")
+debug_color = Color(0.592157, 0.545098, 0.0627451, 0.172549)
+
+[node name="PlanetDetector" type="Area2D" parent="."]
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlanetDetector"]
+shape = SubResource("CircleShape2D_peorb")
+debug_color = Color(0.52549, 0.415686, 1, 0.0980392)
+
+[node name="JetSFX" type="AudioStreamPlayer2D" parent="."]
+material = SubResource("ShaderMaterial_0u4x4")
+stream = ExtResource("5_sgchb")
+volume_db = -8.465
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_rdaam")
+position = Vector2(-2.815, -91)
+texture = ExtResource("3_csrx2")
+
+[node name="JetpackVertical" type="CPUParticles2D" parent="Sprite2D"]
+z_index = -1
+position = Vector2(-44, 121)
+amount = 20
+texture = ExtResource("4_edddd")
+direction = Vector2(0, 1)
+spread = 14.02
+gravity = Vector2(0, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 138.64
+angular_velocity_min = -22.0
+angular_velocity_max = 126.0
+scale_amount_min = 0.5
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nallm")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_ayi0c")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../AnimationPlayer")
+
+[connection signal="area_entered" from="PlanetDetector" to="." method="_on_planet_entered"]
+[connection signal="area_exited" from="PlanetDetector" to="." method="_on_planet_exited"]

@@ -1,5 +1,7 @@
 extends Node
 
+@export var start_audio : AudioStream
+
 var num_players = 8
 var bus = "SFX"
 

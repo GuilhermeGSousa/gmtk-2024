@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://c72kbhkypdih4"]
 
 [ext_resource type="Script" path="res://scripts/utilities/transition.gd" id="1_hsdn8"]
 [ext_resource type="Shader" path="res://shaders/screen_transitions/circle_screen_transition.gdshader" id="2_pt6ot"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fvmw8"]
 shader = ExtResource("2_pt6ot")
-shader_parameter/in_color = Color(0.792157, 0.627451, 0.352941, 1)
+shader_parameter/in_color = Color(0.815686, 0.741176, 0.403922, 1)
 shader_parameter/out_color = Color(0.996078, 0.698039, 0.682353, 1)
 shader_parameter/in_out = 0.0
 shader_parameter/position = 1.0

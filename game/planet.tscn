@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxkeqjeshda75"]
+
+[ext_resource type="Script" path="res://game/gravity_field.gd" id="1_qn85r"]
+[ext_resource type="Texture2D" uid="uid://bvtsxwnb2ou8v" path="res://sprites/shapes/circle.png" id="2_qcba4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fy168"]
+radius = 1500.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_62mxv"]
+radius = 776.62
+
+[node name="Planet" type="StaticBody2D"]
+position = Vector2(806, 1324)
+collision_layer = 8
+
+[node name="GravityField" type="Area2D" parent="."]
+collision_layer = 8
+script = ExtResource("1_qn85r")
+planet_gravity_acceleration = 20
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GravityField"]
+scale = Vector2(0.985888, 0.995109)
+shape = SubResource("CircleShape2D_fy168")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 0)
+shape = SubResource("CircleShape2D_62mxv")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D"]
+visibility_layer = 3
+scale = Vector2(15.5143, 15.3841)
+texture = ExtResource("2_qcba4")
+
+[connection signal="body_entered" from="GravityField" to="GravityField" method="_on_gravity_field_body_entered"]
+[connection signal="body_exited" from="GravityField" to="GravityField" method="_on_gravity_field_body_exited"]

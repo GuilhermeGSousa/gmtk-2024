@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://c3nd2ta6s1lc1"]
+
+[ext_resource type="Script" path="res://game/spaceship.gd" id="1_lwp44"]
+[ext_resource type="Texture2D" uid="uid://d2jxec8qvt6qq" path="res://sprites/shapes/triangle.png" id="2_l35vc"]
+[ext_resource type="Script" path="res://scripts/interaction/interactible.gd" id="2_xb55d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hl1rg"]
+size = Vector2(71.215, 70.37)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5vqt"]
+size = Vector2(65, 64)
+
+[node name="Spaceship" type="RigidBody2D"]
+position = Vector2(424, 406)
+collision_mask = 8
+mass = 0.1
+gravity_scale = 0.0
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_lwp44")
+thrust = 10.0
+
+[node name="EnterShip" type="Area2D" parent="."]
+script = ExtResource("2_xb55d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnterShip"]
+shape = SubResource("RectangleShape2D_hl1rg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_i5vqt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_l35vc")
+
+[node name="PlayerSeat" type="Node2D" parent="."]
+position = Vector2(0, 10)
+
+[connection signal="on_interacted" from="EnterShip" to="." method="_on_enter_ship"]

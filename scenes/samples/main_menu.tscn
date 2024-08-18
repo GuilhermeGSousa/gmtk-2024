@@ -339,20 +339,5 @@ libraries = {
 tree_root = SubResource("AnimationNodeStateMachine_6w8s2")
 advance_expression_base_node = NodePath("../Main Menu/Menu Control")
 anim_player = NodePath("../AnimationPlayer")
-parameters/current_length = 1.0
-parameters/current_position = 1.0
-parameters/current_delta = 0.0
-parameters/End/current_length = null
-parameters/End/current_position = null
-parameters/End/current_delta = null
-parameters/Start/current_length = 0.0
-parameters/Start/current_position = 0.0
-parameters/Start/current_delta = 0.0
-parameters/main_menu/current_length = 1.0
-parameters/main_menu/current_position = 1.0
-parameters/main_menu/current_delta = 0.0
-parameters/settings_menu/current_length = null
-parameters/settings_menu/current_position = null
-parameters/settings_menu/current_delta = null
 
 [connection signal="pressed" from="Settings Menu/MarginContainer/VBoxContainer/Button" to="Main Menu/Menu Control" method="_on_return_main_menu_button_pressed"]

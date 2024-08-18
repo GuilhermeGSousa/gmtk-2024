@@ -1,0 +1,349 @@
+[gd_scene load_steps=24 format=3 uid="uid://cdif7jh10022u"]
+
+[ext_resource type="PackedScene" uid="uid://dsv0dai7ivv4i" path="res://game/space.tscn" id="4_atuas"]
+[ext_resource type="Theme" uid="uid://byds11vsd6ber" path="res://themes/pixelart/pixelart.tres" id="5_mbtax"]
+[ext_resource type="Script" path="res://scripts/ui/viewport_container.gd" id="6_l2e6f"]
+[ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="6_mf27x"]
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="7_8i1t5"]
+[ext_resource type="PackedScene" uid="uid://c72kbhkypdih4" path="res://scenes/scene_transitions/circle_transition.tscn" id="9_6ieqg"]
+[ext_resource type="PackedScene" path="res://scenes/common/ui/load_button.tscn" id="10_7g5lp"]
+[ext_resource type="Script" path="res://scripts/ui/audio_menu.gd" id="11_aeeuf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pb3uo"]
+shader = ExtResource("6_mf27x")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="LabelSettings" id="LabelSettings_utnyj"]
+font_size = 100
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qvk3e"]
+shader = ExtResource("6_mf27x")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="LabelSettings" id="LabelSettings_0qyyl"]
+font_size = 100
+
+[sub_resource type="Animation" id="Animation_ro8gj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main Menu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Settings Menu:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1152, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_u1ere"]
+resource_name = "main_menu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main Menu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Settings Menu:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1152, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ns3jf"]
+resource_name = "settings_menu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main Menu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1152, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Settings Menu:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xq8ga"]
+_data = {
+"RESET": SubResource("Animation_ro8gj"),
+"main_menu": SubResource("Animation_u1ere"),
+"settings_menu": SubResource("Animation_ns3jf")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h0fc5"]
+animation = &"main_menu"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cmvsc"]
+animation = &"settings_menu"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ckc0g"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_huiay"]
+xfade_time = 1.0
+advance_mode = 2
+advance_expression = "self.current_menu == Menu.SETTINGS_MENU"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b8jnv"]
+xfade_time = 1.0
+advance_mode = 2
+advance_expression = "current_menu == Menu.MAIN_MENU"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_6w8s2"]
+states/End/position = Vector2(925, 167)
+states/Start/position = Vector2(225, 179)
+states/main_menu/node = SubResource("AnimationNodeAnimation_h0fc5")
+states/main_menu/position = Vector2(431, 179)
+states/settings_menu/node = SubResource("AnimationNodeAnimation_cmvsc")
+states/settings_menu/position = Vector2(685, 179)
+transitions = ["Start", "main_menu", SubResource("AnimationNodeStateMachineTransition_ckc0g"), "main_menu", "settings_menu", SubResource("AnimationNodeStateMachineTransition_huiay"), "settings_menu", "main_menu", SubResource("AnimationNodeStateMachineTransition_b8jnv")]
+graph_offset = Vector2(-12, 98)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rk5ip"]
+shader = ExtResource("6_mf27x")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[node name="menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("5_mbtax")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_mbtax")
+
+[node name="Main Menu" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_l2e6f")
+
+[node name="Menu Control" type="Control" parent="Main Menu" node_paths=PackedStringArray("start_button", "settings_button", "exit_button")]
+layout_mode = 2
+script = ExtResource("7_8i1t5")
+start_button = NodePath("../MarginContainer/VBoxContainer/start_button")
+settings_button = NodePath("../MarginContainer/VBoxContainer/settings_button")
+exit_button = NodePath("../MarginContainer/VBoxContainer/exit_button")
+start_scene_path = ExtResource("4_atuas")
+transition_path = ExtResource("9_6ieqg")
+
+[node name="MarginContainer" type="MarginContainer" parent="Main Menu"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main Menu/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="title" type="Label" parent="Main Menu/MarginContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_pb3uo")
+layout_mode = 2
+text = "Looking for you"
+label_settings = SubResource("LabelSettings_utnyj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="start_button" type="Button" parent="Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="load_button" parent="Main Menu/MarginContainer/VBoxContainer" instance=ExtResource("10_7g5lp")]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Continue"
+
+[node name="settings_button" type="Button" parent="Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="exit_button" type="Button" parent="Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="Settings Menu" type="AspectRatioContainer" parent="."]
+layout_mode = 0
+offset_left = 1152.0
+offset_right = 2304.0
+offset_bottom = 648.0
+script = ExtResource("6_l2e6f")
+
+[node name="Audio Control" type="Control" parent="Settings Menu" node_paths=PackedStringArray("master_slider", "music_slider", "sfx_slider")]
+layout_mode = 2
+script = ExtResource("11_aeeuf")
+master_slider = NodePath("../MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HSlider")
+music_slider = NodePath("../MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HSlider2")
+sfx_slider = NodePath("../MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HSlider3")
+
+[node name="MarginContainer" type="MarginContainer" parent="Settings Menu"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings Menu/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings Menu/MarginContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_qvk3e")
+layout_mode = 2
+text = "Settings"
+label_settings = SubResource("LabelSettings_0qyyl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Settings Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbtax")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Master"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbtax")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Music
+"
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "SFX
+"
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = ExtResource("5_mbtax")
+max_value = 1.0
+step = 0.01
+
+[node name="HSlider2" type="HSlider" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = ExtResource("5_mbtax")
+max_value = 1.0
+step = 0.01
+
+[node name="HSlider3" type="HSlider" parent="Settings Menu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = ExtResource("5_mbtax")
+max_value = 1.0
+step = 0.01
+
+[node name="Button" type="Button" parent="Settings Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Return"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xq8ga")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_6w8s2")
+advance_expression_base_node = NodePath("../Main Menu/Menu Control")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="Label" type="Label" parent="."]
+material = SubResource("ShaderMaterial_rk5ip")
+layout_mode = 0
+offset_left = 813.0
+offset_top = 423.0
+offset_right = 1153.0
+offset_bottom = 478.0
+rotation = 0.165426
+theme_override_font_sizes/font_size = 51
+text = "WASD To Move
+e to use"
+
+[node name="Label2" type="Label" parent="."]
+material = SubResource("ShaderMaterial_rk5ip")
+layout_mode = 0
+offset_left = 46.0
+offset_top = 507.0
+offset_right = 386.0
+offset_bottom = 620.0
+rotation = -0.233933
+theme_override_font_sizes/font_size = 51
+text = "SPACE to thrust"
+
+[connection signal="pressed" from="Settings Menu/MarginContainer/VBoxContainer/Button" to="Main Menu/Menu Control" method="_on_return_main_menu_button_pressed"]

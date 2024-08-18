@@ -1,0 +1,516 @@
+[gd_scene load_steps=53 format=3 uid="uid://dsv0dai7ivv4i"]
+
+[ext_resource type="Shader" path="res://shaders/minimap.gdshader" id="1_0s851"]
+[ext_resource type="Script" path="res://scripts/camera/camera_area.gd" id="1_1y2y2"]
+[ext_resource type="Script" path="res://scripts/ui/dialog_box.gd" id="1_i2u53"]
+[ext_resource type="Script" path="res://scripts/ui/viewport_texture_rect.gd" id="1_m2nyi"]
+[ext_resource type="Texture2D" uid="uid://bi7fkmg3oosb7" path="res://sprites/shapes/square.png" id="1_q0lxa"]
+[ext_resource type="Script" path="res://game/ship_ui.gd" id="1_rqv4q"]
+[ext_resource type="Script" path="res://game/kill_area.gd" id="1_un2yd"]
+[ext_resource type="Script" path="res://scripts/camera/camera_targeter.gd" id="2_00qkx"]
+[ext_resource type="PackedScene" uid="uid://c3nd2ta6s1lc1" path="res://game/spaceship.tscn" id="2_dnrjg"]
+[ext_resource type="PackedScene" uid="uid://xdi8flrfu1d1" path="res://game/player.tscn" id="2_qrkjm"]
+[ext_resource type="Texture2D" uid="uid://dgamfsjt5iybj" path="res://game/assets/background_tile.png" id="2_rtm5g"]
+[ext_resource type="Script" path="res://game/camera_target_manager.gd" id="2_wavk4"]
+[ext_resource type="Theme" uid="uid://byds11vsd6ber" path="res://themes/pixelart/pixelart.tres" id="3_xsh4q"]
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="4_4henq"]
+[ext_resource type="Script" path="res://game/gravity_field.gd" id="5_bv2sw"]
+[ext_resource type="Resource" path="res://game_resources/is_paused_reference.tres" id="5_y3l1s"]
+[ext_resource type="PackedScene" path="res://scenes/common/ui/mute_button.tscn" id="6_b1o1r"]
+[ext_resource type="Script" path="res://scripts/ui/load_button.gd" id="8_0uorj"]
+[ext_resource type="Script" path="res://scripts/camera/camera_shaker.gd" id="8_lr6sh"]
+[ext_resource type="Script" path="res://scripts/camera/screensize_viewport.gd" id="8_y8i4n"]
+[ext_resource type="PackedScene" uid="uid://bhuq3pypqjjo7" path="res://game/earth.tscn" id="10_53qi6"]
+[ext_resource type="Script" path="res://scripts/interaction/dialog/dialog_interactable.gd" id="11_1ybdr"]
+[ext_resource type="Script" path="res://scripts/utilities/save_area.gd" id="16_r33sb"]
+[ext_resource type="Script" path="res://game/moon_pivot.gd" id="17_6mhb3"]
+[ext_resource type="Texture2D" uid="uid://cwenv01v15ol0" path="res://game/assets/moon.png" id="18_xiiyh"]
+[ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="19_5ar6q"]
+[ext_resource type="PackedScene" uid="uid://b7ppt7ern0ou4" path="res://game/golf.tscn" id="19_671f4"]
+[ext_resource type="Script" path="res://game/dialog_unlocker.gd" id="26_ksulj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8q12v"]
+size = Vector2(50000, 3000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8ap1n"]
+size = Vector2(50000, 32754)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4kvfi"]
+shader = ExtResource("1_0s851")
+shader_parameter/color = Color(0.611765, 0.372549, 0.407843, 1)
+shader_parameter/background_color = Color(0.0470588, 0.0235294, 0.243137, 1)
+shader_parameter/trajectory_color = Color(0.854902, 0.788235, 0.419608, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_il6pt"]
+viewport_path = NodePath("MapViewport")
+
+[sub_resource type="Animation" id="Animation_oiu35"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 224)]
+}
+
+[sub_resource type="Animation" id="Animation_3sjna"]
+resource_name = "off"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 700)]
+}
+
+[sub_resource type="Animation" id="Animation_o5eb6"]
+resource_name = "on"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 224)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dom25"]
+_data = {
+"RESET": SubResource("Animation_oiu35"),
+"off": SubResource("Animation_3sjna"),
+"on": SubResource("Animation_o5eb6")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_88rbv"]
+animation = &"off"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_28axv"]
+animation = &"on"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gbhpu"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_w4ejy"]
+xfade_time = 1.0
+advance_mode = 2
+advance_expression = "is_on"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wgp4s"]
+xfade_time = 1.0
+advance_mode = 2
+advance_expression = "not is_on"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_brx5n"]
+states/Start/position = Vector2(174, 100)
+states/off/node = SubResource("AnimationNodeAnimation_88rbv")
+states/off/position = Vector2(392, 96)
+states/on/node = SubResource("AnimationNodeAnimation_28axv")
+states/on/position = Vector2(612, 75)
+transitions = ["Start", "off", SubResource("AnimationNodeStateMachineTransition_gbhpu"), "off", "on", SubResource("AnimationNodeStateMachineTransition_w4ejy"), "on", "off", SubResource("AnimationNodeStateMachineTransition_wgp4s")]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iakem"]
+bg_color = Color(0.611765, 0.372549, 0.407843, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.815686, 0.741176, 0.403922, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 70
+
+[sub_resource type="LabelSettings" id="LabelSettings_j07ig"]
+font_size = 141
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5h1wm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ixce0"]
+radius = 1752.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_olcij"]
+shader = ExtResource("19_5ar6q")
+shader_parameter/normal_offset = 3.8
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2gxn8"]
+radius = 472.0
+height = 944.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hyxbl"]
+radius = 96.65
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bchpj"]
+radius = 96.65
+
+[sub_resource type="Curve" id="Curve_g1d84"]
+_data = [Vector2(0, 32.475), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_5ky70"]
+bake_resolution = 65
+_data = [Vector2(0, 22.635), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[node name="Space" type="Node"]
+
+[node name="KillArea" type="Area2D" parent="."]
+position = Vector2(-256, 33920)
+script = ExtResource("1_un2yd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea"]
+position = Vector2(684, -23035)
+shape = SubResource("RectangleShape2D_8q12v")
+debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
+
+[node name="KillArea2" type="Area2D" parent="."]
+position = Vector2(-768, -4608)
+script = ExtResource("1_un2yd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea2"]
+position = Vector2(684, -23035)
+shape = SubResource("RectangleShape2D_8q12v")
+debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
+
+[node name="KillArea3" type="Area2D" parent="."]
+position = Vector2(-49664, -7552)
+rotation = 1.5708
+script = ExtResource("1_un2yd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea3"]
+position = Vector2(684, -23035)
+shape = SubResource("RectangleShape2D_8q12v")
+debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
+
+[node name="KillArea4" type="Area2D" parent="."]
+position = Vector2(4224, -7552)
+rotation = 1.5708
+script = ExtResource("1_un2yd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea4"]
+position = Vector2(684, -23035)
+shape = SubResource("RectangleShape2D_8q12v")
+debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
+
+[node name="CameraArea" type="Area2D" parent="."]
+position = Vector2(114, 0)
+script = ExtResource("1_1y2y2")
+deactivate_on_exit = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea"]
+position = Vector2(0, -8623)
+shape = SubResource("RectangleShape2D_8ap1n")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scroll_ignore_camera_zoom = true
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.01, 0.01)
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture_repeat = 2
+texture = ExtResource("2_rtm5g")
+region_enabled = true
+region_rect = Rect2(0, 0, 1e+06, 1e+06)
+
+[node name="ShipUI" type="CanvasLayer" parent="."]
+visible = false
+script = ExtResource("1_rqv4q")
+
+[node name="Map" type="Control" parent="ShipUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ShipUI/Map"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -289.0
+offset_top = -162.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 45
+theme_override_constants/margin_bottom = 45
+
+[node name="ViewportTextureRect" type="TextureRect" parent="ShipUI/Map/MarginContainer" node_paths=PackedStringArray("viewport")]
+material = SubResource("ShaderMaterial_4kvfi")
+layout_mode = 2
+size_flags_vertical = 0
+texture = SubResource("ViewportTexture_il6pt")
+script = ExtResource("1_m2nyi")
+viewport = NodePath("../../../../MapViewport")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="DialogBox" type="Control" parent="UI" node_paths=PackedStringArray("text")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i2u53")
+text = NodePath("MarginContainer/Label")
+scroll_duration = 0.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/DialogBox"]
+libraries = {
+"": SubResource("AnimationLibrary_dom25")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="UI/DialogBox"]
+tree_root = SubResource("AnimationNodeStateMachine_brx5n")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/DialogBox"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -100.0
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="Panel" type="Panel" parent="UI/DialogBox/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_xsh4q")
+theme_override_styles/panel = SubResource("StyleBoxFlat_iakem")
+
+[node name="Label" type="Label" parent="UI/DialogBox/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_xsh4q")
+theme_override_font_sizes/font_size = 81
+text = "Hi, nice to meet you!"
+
+[node name="pause_menu" type="Control" parent="UI"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("3_xsh4q")
+script = ExtResource("4_4henq")
+is_paused = ExtResource("5_y3l1s")
+
+[node name="mute_button" parent="UI/pause_menu" instance=ExtResource("6_b1o1r")]
+layout_mode = 0
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="UI/pause_menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/pause_menu/AspectRatioContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_bottom = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/pause_menu/AspectRatioContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="UI/pause_menu/AspectRatioContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "PAUSE"
+label_settings = SubResource("LabelSettings_j07ig")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="UI/pause_menu/AspectRatioContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+theme_override_styles/separator = SubResource("StyleBoxEmpty_5h1wm")
+
+[node name="load_button" type="Button" parent="UI/pause_menu/AspectRatioContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 6
+text = "Restart from Checkpoint"
+script = ExtResource("8_0uorj")
+
+[node name="MapViewport" type="SubViewport" parent="."]
+disable_3d = true
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+canvas_cull_mask = 4294967294
+size = Vector2i(289, 162)
+script = ExtResource("8_y8i4n")
+
+[node name="MapCamera" type="Camera2D" parent="MapViewport"]
+position = Vector2(831, 1157)
+zoom = Vector2(0.01, 0.01)
+
+[node name="MapCameraTargeter" type="Node" parent="MapViewport" node_paths=PackedStringArray("camera")]
+script = ExtResource("2_00qkx")
+camera = NodePath("../MapCamera")
+max_zoom = 0.01
+targets = Array[NodePath]([NodePath("../../Spaceship")])
+
+[node name="CameraArea" type="Area2D" parent="MapViewport"]
+script = ExtResource("1_1y2y2")
+deactivate_on_exit = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapViewport/CameraArea"]
+shape = SubResource("RectangleShape2D_8ap1n")
+
+[node name="CameraTargeter" type="Node" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("2_00qkx")
+camera = NodePath("../Camera2D")
+min_zoom = 6.0
+max_zoom = 0.3
+margin = Vector2(0, 0)
+targets = Array[NodePath]([NodePath("../Spaceship"), NodePath("../Earth")])
+
+[node name="CameraShaker" type="Node" parent="."]
+script = ExtResource("8_lr6sh")
+max_offset = Vector2(30, 30)
+
+[node name="CameraTargetManager" type="Node" parent="." node_paths=PackedStringArray("cam_targeter", "player", "spaceship")]
+script = ExtResource("2_wavk4")
+cam_targeter = NodePath("../CameraTargeter")
+player = NodePath("../Player")
+spaceship = NodePath("../Spaceship")
+ship_zoom = 0.2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(803, 2266)
+ignore_rotation = false
+zoom = Vector2(0.3, 0.3)
+
+[node name="Earth" parent="." instance=ExtResource("10_53qi6")]
+
+[node name="MoonPivot" type="Node2D" parent="Earth"]
+visibility_layer = 3
+rotation = -6.28319
+script = ExtResource("17_6mhb3")
+rotation_speed = 2.0
+
+[node name="Moon" type="StaticBody2D" parent="Earth/MoonPivot"]
+visibility_layer = 3
+position = Vector2(-3663, -4403)
+collision_layer = 8
+
+[node name="GravityField" type="Area2D" parent="Earth/MoonPivot/Moon"]
+position = Vector2(200, -276)
+collision_layer = 8
+script = ExtResource("5_bv2sw")
+planet_gravity_acceleration = 40
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth/MoonPivot/Moon/GravityField"]
+scale = Vector2(0.985888, 0.995109)
+shape = SubResource("CircleShape2D_ixce0")
+debug_color = Color(0.668341, 0.311278, 1, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="Earth/MoonPivot/Moon"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_olcij")
+position = Vector2(171, -244)
+texture = ExtResource("18_xiiyh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth/MoonPivot/Moon"]
+position = Vector2(231, -242)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_2gxn8")
+
+[node name="Golf" parent="." instance=ExtResource("19_671f4")]
+
+[node name="Spaceship" parent="." node_paths=PackedStringArray("trajectory") instance=ExtResource("2_dnrjg")]
+position = Vector2(831, 1157)
+rotation = -0.0628319
+trajectory = NodePath("../Line2D")
+can_control = false
+
+[node name="DialogInteractable" type="Area2D" parent="." node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visibility_layer = 3
+position = Vector2(1526, 1450)
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../UI/DialogBox")
+dialog_lines = Array[String](["Hello", "Is it me?"])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogInteractable"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="SaveArea" type="Area2D" parent="DialogInteractable"]
+script = ExtResource("16_r33sb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogInteractable/SaveArea"]
+shape = SubResource("CircleShape2D_bchpj")
+debug_color = Color(0.262392, 0.633833, 0, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="DialogInteractable"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+texture = ExtResource("1_q0lxa")
+
+[node name="NextUnlocker" type="Node" parent="DialogInteractable"]
+script = ExtResource("26_ksulj")
+
+[node name="Line2D" type="Line2D" parent="DialogInteractable"]
+visibility_layer = 3
+points = PackedVector2Array(-254, -583, 41, -91, 451, -1138, 41, -91, 615, -184)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("2_qrkjm")]
+position = Vector2(1276, 1443)
+mass = 0.001
+vertical_thrust = 0.07
+horizontal_thrust = 0.5
+max_speed = 100.0
+
+[node name="Line2D" type="Line2D" parent="."]
+visibility_layer = 2
+texture_repeat = 2
+points = PackedVector2Array(500, 0)
+width_curve = SubResource("Curve_5ky70")
+default_color = Color(1, 1, 1, 0.00392157)
+
+[connection signal="body_entered" from="Earth/MoonPivot/Moon/GravityField" to="Earth/MoonPivot/Moon/GravityField" method="_on_gravity_field_body_entered"]
+[connection signal="body_exited" from="Earth/MoonPivot/Moon/GravityField" to="Earth/MoonPivot/Moon/GravityField" method="_on_gravity_field_body_exited"]
+[connection signal="on_ship_entered" from="Spaceship" to="ShipUI" method="_on_spaceship_entered"]
+[connection signal="on_ship_exited" from="Spaceship" to="ShipUI" method="_on_spaceship_exited"]
+[connection signal="on_interacted" from="DialogInteractable" to="DialogInteractable/NextUnlocker" method="_on_dialog_interacted"]

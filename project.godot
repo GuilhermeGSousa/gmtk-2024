@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GMTK 2024"
-run/main_scene="res://scenes/samples/main_menu.tscn"
+run/main_scene="res://game/space.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/use_filter=false
 config/icon="res://icon.svg"
@@ -26,11 +26,17 @@ AudioManager="*res://scenes/preloads/audio_manager.tscn"
 SceneTransitionManager="*res://scenes/preloads/scene_transition_manager.tscn"
 SaveManager="*res://scenes/preloads/save_manager.tscn"
 CameraShakeManager="*res://scenes/preloads/camera_shake_manager.tscn"
+PlanetManager="*res://game/planet_manager.gd"
+GameManager="*res://game/game_manager.gd"
 
 [display]
 
-window/size/resizable=false
 window/stretch/mode="canvas_items"
+
+[global_group]
+
+Saveable=""
+player=""
 
 [input]
 
@@ -91,8 +97,19 @@ shoot={
 2d_physics/layer_4="Static Object"
 2d_physics/layer_5="Dynamic Object"
 2d_physics/layer_6="Hit Box"
+2d_physics/layer_7="Interactible"
+
+[physics]
+
+2d/default_gravity=0.0
+2d/default_gravity_vector=Vector2(0, 0)
+2d/default_linear_damp=0.0
+2d/default_angular_damp=0.0
+2d/sleep_threshold_linear=0.0
+2d/canvas_textures/default_texture_filter=0
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 environment/volumetric_fog/use_filter=0
 environment/defaults/default_clear_color=Color(0.788235, 0.8, 0.631373, 1)
