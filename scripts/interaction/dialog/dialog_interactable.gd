@@ -3,6 +3,9 @@ class_name DialogInteractable extends Interactable
 @export var dialog_box : DialogBox
 @export var dialog_lines : Array[String]
 
+signal on_dialog_finished
+signal on_dialog_started
+
 var _current_line_index = -1
 
 func _on_area_exited(area : Area2D):
@@ -16,10 +19,12 @@ func _on_interact(interactor : Interactor):
 func _advance_dialog():
 	if(_current_line_index == -1):
 		dialog_box.is_on = true
+		on_dialog_started .emit()
 	
 	if(_current_line_index >= dialog_lines.size() - 1):
 		dialog_box.is_on = false
 		_current_line_index = -1
+		on_dialog_finished.emit()
 		return
 	
 	_current_line_index += 1

@@ -10,11 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://be88s1yaujffq" path="res://game/assets/ball04.PNG" id="8_pnkrw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_knise"]
-radius = 6000.0
+radius = 6116.85
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b15ku"]
-radius = 1392.0
-height = 2956.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_xcx0j"]
+radius = 1492.9
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cya6y"]
 radius = 198.95
@@ -47,7 +46,7 @@ texture = ExtResource("3_7r8wq")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(204, -276)
 rotation = 1.5708
-shape = SubResource("CapsuleShape2D_b15ku")
+shape = SubResource("CircleShape2D_xcx0j")
 
 [node name="BallPivot" type="Node2D" parent="."]
 visibility_layer = 3

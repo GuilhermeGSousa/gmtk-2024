@@ -1,4 +1,4 @@
-extends Node
+class_name CameraTargetManager extends Node
 
 @export var cam_targeter : CameraTargeter
 @export var player : Astronaut

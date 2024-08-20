@@ -1,5 +1,6 @@
-[gd_scene load_steps=24 format=3 uid="uid://cdif7jh10022u"]
+[gd_scene load_steps=26 format=3 uid="uid://cdif7jh10022u"]
 
+[ext_resource type="Texture2D" uid="uid://mhua7amcklby" path="res://game/assets/background.png" id="2_8dk1e"]
 [ext_resource type="PackedScene" uid="uid://dsv0dai7ivv4i" path="res://game/space.tscn" id="4_atuas"]
 [ext_resource type="Theme" uid="uid://byds11vsd6ber" path="res://themes/pixelart/pixelart.tres" id="5_mbtax"]
 [ext_resource type="Script" path="res://scripts/ui/viewport_container.gd" id="6_l2e6f"]
@@ -8,6 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://c72kbhkypdih4" path="res://scenes/scene_transitions/circle_transition.tscn" id="9_6ieqg"]
 [ext_resource type="PackedScene" path="res://scenes/common/ui/load_button.tscn" id="10_7g5lp"]
 [ext_resource type="Script" path="res://scripts/ui/audio_menu.gd" id="11_aeeuf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7kkjx"]
+texture = ExtResource("2_8dk1e")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pb3uo"]
 shader = ExtResource("6_mf27x")
@@ -172,6 +176,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_mbtax")
+theme_override_styles/panel = SubResource("StyleBoxTexture_7kkjx")
 
 [node name="Main Menu" type="AspectRatioContainer" parent="."]
 layout_mode = 1
@@ -201,7 +206,7 @@ alignment = 1
 [node name="title" type="Label" parent="Main Menu/MarginContainer/VBoxContainer"]
 material = SubResource("ShaderMaterial_pb3uo")
 layout_mode = 2
-text = "Looking for you"
+text = "Star Crossed Lovers"
 label_settings = SubResource("LabelSettings_utnyj")
 horizontal_alignment = 1
 vertical_alignment = 1

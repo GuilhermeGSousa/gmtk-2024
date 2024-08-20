@@ -1,10 +1,9 @@
-[gd_scene load_steps=53 format=3 uid="uid://dsv0dai7ivv4i"]
+[gd_scene load_steps=61 format=3 uid="uid://dsv0dai7ivv4i"]
 
 [ext_resource type="Shader" path="res://shaders/minimap.gdshader" id="1_0s851"]
 [ext_resource type="Script" path="res://scripts/camera/camera_area.gd" id="1_1y2y2"]
 [ext_resource type="Script" path="res://scripts/ui/dialog_box.gd" id="1_i2u53"]
 [ext_resource type="Script" path="res://scripts/ui/viewport_texture_rect.gd" id="1_m2nyi"]
-[ext_resource type="Texture2D" uid="uid://bi7fkmg3oosb7" path="res://sprites/shapes/square.png" id="1_q0lxa"]
 [ext_resource type="Script" path="res://game/ship_ui.gd" id="1_rqv4q"]
 [ext_resource type="Script" path="res://game/kill_area.gd" id="1_un2yd"]
 [ext_resource type="Script" path="res://scripts/camera/camera_targeter.gd" id="2_00qkx"]
@@ -15,6 +14,7 @@
 [ext_resource type="Theme" uid="uid://byds11vsd6ber" path="res://themes/pixelart/pixelart.tres" id="3_xsh4q"]
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="4_4henq"]
 [ext_resource type="Script" path="res://game/gravity_field.gd" id="5_bv2sw"]
+[ext_resource type="Texture2D" uid="uid://og0d4d41x6o2" path="res://game/borduredisplay.PNG" id="5_mhway"]
 [ext_resource type="Resource" path="res://game_resources/is_paused_reference.tres" id="5_y3l1s"]
 [ext_resource type="PackedScene" path="res://scenes/common/ui/mute_button.tscn" id="6_b1o1r"]
 [ext_resource type="Script" path="res://scripts/ui/load_button.gd" id="8_0uorj"]
@@ -22,18 +22,26 @@
 [ext_resource type="Script" path="res://scripts/camera/screensize_viewport.gd" id="8_y8i4n"]
 [ext_resource type="PackedScene" uid="uid://bhuq3pypqjjo7" path="res://game/earth.tscn" id="10_53qi6"]
 [ext_resource type="Script" path="res://scripts/interaction/dialog/dialog_interactable.gd" id="11_1ybdr"]
-[ext_resource type="Script" path="res://scripts/utilities/save_area.gd" id="16_r33sb"]
 [ext_resource type="Script" path="res://game/moon_pivot.gd" id="17_6mhb3"]
+[ext_resource type="Script" path="res://game/save_manager.gd" id="18_ca0u2"]
 [ext_resource type="Texture2D" uid="uid://cwenv01v15ol0" path="res://game/assets/moon.png" id="18_xiiyh"]
 [ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="19_5ar6q"]
 [ext_resource type="PackedScene" uid="uid://b7ppt7ern0ou4" path="res://game/golf.tscn" id="19_671f4"]
+[ext_resource type="PackedScene" uid="uid://duycprfy4bjng" path="res://game/duck.tscn" id="23_l567j"]
+[ext_resource type="PackedScene" uid="uid://c0xddoc8g743n" path="res://game/spaghetti.tscn" id="24_gkvtc"]
+[ext_resource type="PackedScene" uid="uid://bw0nf6jee2j65" path="res://game/popcorn.tscn" id="25_ikea3"]
 [ext_resource type="Script" path="res://game/dialog_unlocker.gd" id="26_ksulj"]
+[ext_resource type="PackedScene" uid="uid://cnjc1og1q58id" path="res://game/mic.tscn" id="26_uvsrx"]
+[ext_resource type="Texture2D" uid="uid://2eao3j66iwy" path="res://game/assets/postcard.PNG" id="27_i4jtf"]
+[ext_resource type="Script" path="res://game/outline_shader.gd" id="28_4rs2u"]
+[ext_resource type="Texture2D" uid="uid://bvtsxwnb2ou8v" path="res://sprites/shapes/circle.png" id="28_pdoe3"]
+[ext_resource type="PackedScene" uid="uid://cyfppkrvjdrhu" path="res://game/head.tscn" id="34_r7sxh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8q12v"]
 size = Vector2(50000, 3000)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ap1n"]
-size = Vector2(50000, 32754)
+size = Vector2(45056, 41652)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4kvfi"]
 shader = ExtResource("1_0s851")
@@ -86,7 +94,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 224)]
+"values": [Vector2(0, 440.93)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dom25"]
@@ -134,8 +142,6 @@ corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 70
 
 [sub_resource type="LabelSettings" id="LabelSettings_j07ig"]
 font_size = 141
@@ -159,12 +165,16 @@ height = 944.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_hyxbl"]
 radius = 96.65
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bchpj"]
-radius = 96.65
-
 [sub_resource type="Curve" id="Curve_g1d84"]
 _data = [Vector2(0, 32.475), 0.0, 0.0, 0, 0]
 point_count = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8bdyb"]
+shader = ExtResource("19_5ar6q")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
 
 [sub_resource type="Curve" id="Curve_5ky70"]
 bake_resolution = 65
@@ -174,7 +184,7 @@ point_count = 1
 [node name="Space" type="Node"]
 
 [node name="KillArea" type="Area2D" parent="."]
-position = Vector2(-256, 33920)
+position = Vector2(-896, 45056)
 script = ExtResource("1_un2yd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea"]
@@ -183,7 +193,7 @@ shape = SubResource("RectangleShape2D_8q12v")
 debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
 
 [node name="KillArea2" type="Area2D" parent="."]
-position = Vector2(-768, -4608)
+position = Vector2(-1408, -128)
 script = ExtResource("1_un2yd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea2"]
@@ -192,7 +202,7 @@ shape = SubResource("RectangleShape2D_8q12v")
 debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
 
 [node name="KillArea3" type="Area2D" parent="."]
-position = Vector2(-49664, -7552)
+position = Vector2(-48896, -1152)
 rotation = 1.5708
 script = ExtResource("1_un2yd")
 
@@ -202,7 +212,7 @@ shape = SubResource("RectangleShape2D_8q12v")
 debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
 
 [node name="KillArea4" type="Area2D" parent="."]
-position = Vector2(4224, -7552)
+position = Vector2(384, -768)
 rotation = 1.5708
 script = ExtResource("1_un2yd")
 
@@ -212,13 +222,14 @@ shape = SubResource("RectangleShape2D_8q12v")
 debug_color = Color(0.939696, 0.246513, 1.92523e-07, 0.42)
 
 [node name="CameraArea" type="Area2D" parent="."]
-position = Vector2(114, 0)
+position = Vector2(1266, -11392)
 script = ExtResource("1_1y2y2")
 deactivate_on_exit = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea"]
-position = Vector2(0, -8623)
+position = Vector2(-2401, 10814)
 shape = SubResource("RectangleShape2D_8ap1n")
+debug_color = Color(0, 0.533333, 0.984314, 0.192157)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scroll_ignore_camera_zoom = true
@@ -228,6 +239,7 @@ motion_scale = Vector2(0.01, 0.01)
 
 [node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 texture_repeat = 2
+position = Vector2(181, 0)
 texture = ExtResource("2_rtm5g")
 region_enabled = true
 region_rect = Rect2(0, 0, 1e+06, 1e+06)
@@ -244,28 +256,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ShipUI/Map"]
+[node name="TextureRect" type="TextureRect" parent="ShipUI/Map"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -295.0
+offset_right = 358.0
+offset_bottom = -74.0
+grow_vertical = 0
+scale = Vector2(1.2701, 1.2701)
+texture = ExtResource("5_mhway")
+
+[node name="MarginContainer" type="MarginContainer" parent="ShipUI/Map/TextureRect"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -289.0
-offset_top = -162.0
+offset_left = -325.0
+offset_top = -191.0
+offset_right = -36.0
+offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_left = 0
-theme_override_constants/margin_right = 45
-theme_override_constants/margin_bottom = 45
 
-[node name="ViewportTextureRect" type="TextureRect" parent="ShipUI/Map/MarginContainer" node_paths=PackedStringArray("viewport")]
+[node name="ViewportTextureRect" type="TextureRect" parent="ShipUI/Map/TextureRect/MarginContainer" node_paths=PackedStringArray("viewport")]
 material = SubResource("ShaderMaterial_4kvfi")
 layout_mode = 2
 size_flags_vertical = 0
 texture = SubResource("ViewportTexture_il6pt")
 script = ExtResource("1_m2nyi")
-viewport = NodePath("../../../../MapViewport")
+viewport = NodePath("../../../../../MapViewport")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -277,7 +301,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_i2u53")
-text = NodePath("MarginContainer/Label")
+is_on = true
+text = NodePath("MarginContainer/MarginContainer/Label")
 scroll_duration = 0.5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/DialogBox"]
@@ -292,13 +317,14 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/DialogBox"]
 custom_minimum_size = Vector2(0, 200)
+layout_direction = 2
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_top = -100.0
-offset_bottom = 102.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 100
@@ -309,12 +335,20 @@ layout_mode = 2
 theme = ExtResource("3_xsh4q")
 theme_override_styles/panel = SubResource("StyleBoxFlat_iakem")
 
-[node name="Label" type="Label" parent="UI/DialogBox/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/DialogBox/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Label" type="Label" parent="UI/DialogBox/MarginContainer/MarginContainer"]
+custom_minimum_size = Vector2(2.105, 1.395)
+layout_mode = 2
 theme = ExtResource("3_xsh4q")
-theme_override_font_sizes/font_size = 81
-text = "Hi, nice to meet you!"
+theme_override_font_sizes/font_size = 40
+text = "Hi, nice to meet you! this sis a super long text to see how it is handled"
+autowrap_mode = 3
 
 [node name="pause_menu" type="Control" parent="UI"]
 process_mode = 3
@@ -378,22 +412,25 @@ canvas_cull_mask = 4294967294
 size = Vector2i(289, 162)
 script = ExtResource("8_y8i4n")
 
+[node name="CameraAreaMinimap" type="Area2D" parent="MapViewport"]
+position = Vector2(-14, -8704)
+script = ExtResource("1_1y2y2")
+deactivate_on_exit = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapViewport/CameraAreaMinimap"]
+position = Vector2(-1121, 8126)
+shape = SubResource("RectangleShape2D_8ap1n")
+debug_color = Color(0, 0.533333, 0.984314, 0.192157)
+
 [node name="MapCamera" type="Camera2D" parent="MapViewport"]
-position = Vector2(831, 1157)
-zoom = Vector2(0.01, 0.01)
+position = Vector2(-9005, 10713)
+zoom = Vector2(0.009, 0.009)
 
 [node name="MapCameraTargeter" type="Node" parent="MapViewport" node_paths=PackedStringArray("camera")]
 script = ExtResource("2_00qkx")
 camera = NodePath("../MapCamera")
-max_zoom = 0.01
+max_zoom = 0.009
 targets = Array[NodePath]([NodePath("../../Spaceship")])
-
-[node name="CameraArea" type="Area2D" parent="MapViewport"]
-script = ExtResource("1_1y2y2")
-deactivate_on_exit = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MapViewport/CameraArea"]
-shape = SubResource("RectangleShape2D_8ap1n")
 
 [node name="CameraTargeter" type="Node" parent="." node_paths=PackedStringArray("camera")]
 script = ExtResource("2_00qkx")
@@ -414,12 +451,16 @@ player = NodePath("../Player")
 spaceship = NodePath("../Spaceship")
 ship_zoom = 0.2
 
+[node name="SaveManager" type="Node" parent="."]
+script = ExtResource("18_ca0u2")
+
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(803, 2266)
+position = Vector2(-9275, 11850.5)
 ignore_rotation = false
 zoom = Vector2(0.3, 0.3)
 
 [node name="Earth" parent="." instance=ExtResource("10_53qi6")]
+position = Vector2(-9545, 12988)
 
 [node name="MoonPivot" type="Node2D" parent="Earth"]
 visibility_layer = 3
@@ -454,49 +495,325 @@ position = Vector2(231, -242)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_2gxn8")
 
-[node name="Golf" parent="." instance=ExtResource("19_671f4")]
-
-[node name="Spaceship" parent="." node_paths=PackedStringArray("trajectory") instance=ExtResource("2_dnrjg")]
-position = Vector2(831, 1157)
-rotation = -0.0628319
-trajectory = NodePath("../Line2D")
-can_control = false
-
-[node name="DialogInteractable" type="Area2D" parent="." node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+[node name="Tip1" type="Area2D" parent="Earth" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
 visibility_layer = 3
-position = Vector2(1526, 1450)
+position = Vector2(-33, -2061)
+rotation = -0.172788
 script = ExtResource("11_1ybdr")
-dialog_box = NodePath("../UI/DialogBox")
-dialog_lines = Array[String](["Hello", "Is it me?"])
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["Hi! Hope you are well... (press e to continue)", "I always wanted to meet you!", "I prepared something special for us to do...", "This next clue is a real hole-in-one.", "Good luck on the course of this game!", "Go ahead, don't stay putt!"])
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogInteractable"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth/Tip1"]
 shape = SubResource("CircleShape2D_hyxbl")
 
-[node name="SaveArea" type="Area2D" parent="DialogInteractable"]
-script = ExtResource("16_r33sb")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogInteractable/SaveArea"]
-shape = SubResource("CircleShape2D_bchpj")
-debug_color = Color(0.262392, 0.633833, 0, 0.42)
-
-[node name="Sprite2D" type="Sprite2D" parent="DialogInteractable"]
+[node name="Sprite2D" type="Sprite2D" parent="Earth/Tip1"]
 modulate = Color(1, 0.901961, 0.278431, 1)
-texture = ExtResource("1_q0lxa")
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
 
-[node name="NextUnlocker" type="Node" parent="DialogInteractable"]
+[node name="NextUnlocker" type="Node" parent="Earth/Tip1" node_paths=PackedStringArray("next_dialog")]
 script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Golf/Tip2")
 
-[node name="Line2D" type="Line2D" parent="DialogInteractable"]
+[node name="Line2D" type="Line2D" parent="Earth/Tip1"]
 visibility_layer = 3
-points = PackedVector2Array(-254, -583, 41, -91, 451, -1138, 41, -91, 615, -184)
+position = Vector2(-14.888, -31.0226)
 width_curve = SubResource("Curve_g1d84")
 default_color = Color(0, 0, 1, 0.00392157)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
+[node name="Label" type="Label" parent="Earth"]
+material = SubResource("ShaderMaterial_8bdyb")
+offset_left = 239.0
+offset_top = -2204.0
+offset_right = 509.0
+offset_bottom = -2155.0
+rotation = -1.29251
+theme = ExtResource("3_xsh4q")
+theme_override_font_sizes/font_size = 51
+text = "e to enter ship"
+
+[node name="Label2" type="Label" parent="Earth"]
+material = SubResource("ShaderMaterial_8bdyb")
+offset_left = -333.0
+offset_top = -2241.0
+offset_right = 24.0
+offset_bottom = -2186.0
+rotation = 0.0265896
+theme = ExtResource("3_xsh4q")
+theme_override_font_sizes/font_size = 51
+text = "e to read message"
+
+[node name="Golf" parent="." instance=ExtResource("19_671f4")]
+position = Vector2(3064, 13239)
+
+[node name="Tip2" type="Area2D" parent="Golf" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(1528, -1172)
+rotation = 0.933751
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["Well done! Nice ducking from those golfballs", "but now let's see if you are not a quack."])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Golf/Tip2"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Golf/Tip2"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Golf/Tip2" node_paths=PackedStringArray("next_dialog")]
+script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Duck/Tip3")
+
+[node name="Line2D" type="Line2D" parent="Golf/Tip2"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Golf/Tip2"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Duck" parent="." instance=ExtResource("23_l567j")]
+position = Vector2(11935, 1845)
+
+[node name="Tip3" type="Area2D" parent="Duck" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(822, -947)
+rotation = 0.331613
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["The pasta few moments have been grate! ", "Hope my puns aren't too saucy..."])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Duck/Tip3"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Duck/Tip3"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Duck/Tip3" node_paths=PackedStringArray("next_dialog")]
+script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Spaghetti/Tip4")
+
+[node name="Line2D" type="Line2D" parent="Duck/Tip3"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Duck/Tip3"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Spaghetti" parent="." instance=ExtResource("24_gkvtc")]
+position = Vector2(8078, -10325)
+
+[node name="Tip4" type="Area2D" parent="Spaghetti" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(1302, 2463)
+rotation = -3.71406
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["If you think I'm corny don't worry because", "the next stop you will have a blast!", "Hope you wont be salty...", "because I prefer sweet ones!"])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spaghetti/Tip4"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Spaghetti/Tip4"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Spaghetti/Tip4" node_paths=PackedStringArray("next_dialog")]
+script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Popcorn/Tip5")
+
+[node name="Line2D" type="Line2D" parent="Spaghetti/Tip4"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Spaghetti/Tip4"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Popcorn" parent="." instance=ExtResource("25_ikea3")]
+position = Vector2(-5900, -11988)
+
+[node name="Tip5" type="Area2D" parent="Popcorn" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(-831, 1676)
+rotation = -2.07869
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["I hope I struck a chord with you,", "because you are A Major cutie!"])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Popcorn/Tip5"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Popcorn/Tip5"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Popcorn/Tip5" node_paths=PackedStringArray("next_dialog")]
+script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Mic/Tip6")
+
+[node name="Line2D" type="Line2D" parent="Popcorn/Tip5"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Popcorn/Tip5"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Mic" parent="." instance=ExtResource("26_uvsrx")]
+position = Vector2(-12642, -1802)
+
+[node name="Tip6" type="Area2D" parent="Mic" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(17.9999, 1056)
+rotation = -2.07869
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["What would you wish upon a star?", "I wish that the stars would align for us to meet"])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mic/Tip6"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Mic/Tip6"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Mic/Tip6" node_paths=PackedStringArray("next_dialog")]
+script = ExtResource("26_ksulj")
+next_dialog = NodePath("../../../Head/Tip7")
+
+[node name="Line2D" type="Line2D" parent="Mic/Tip6"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Mic/Tip6"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Head" parent="." node_paths=PackedStringArray("astronaut", "camera_targeter") instance=ExtResource("34_r7sxh")]
+position = Vector2(-35, -6)
+astronaut = NodePath("../Player")
+camera_targeter = NodePath("../CameraTargeter")
+
+[node name="Tip7" type="Area2D" parent="Head" node_paths=PackedStringArray("dialog_box") groups=["Saveable"]]
+visible = false
+visibility_layer = 3
+position = Vector2(153, -2438)
+monitoring = false
+monitorable = false
+script = ExtResource("11_1ybdr")
+dialog_box = NodePath("../../UI/DialogBox")
+dialog_lines = Array[String](["Congrats!", "I hope you had fun because I sure did,", "I've been meaning to tell you something..."])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Head/Tip7"]
+shape = SubResource("CircleShape2D_hyxbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Head/Tip7"]
+modulate = Color(1, 0.901961, 0.278431, 1)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("27_i4jtf")
+script = ExtResource("28_4rs2u")
+
+[node name="NextUnlocker" type="Node" parent="Head/Tip7"]
+script = ExtResource("26_ksulj")
+
+[node name="Line2D" type="Line2D" parent="Head/Tip7"]
+visibility_layer = 3
+position = Vector2(-14.888, -31.0226)
+width_curve = SubResource("Curve_g1d84")
+default_color = Color(0, 0, 1, 0.00392157)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Circle" type="Sprite2D" parent="Head/Tip7"]
+self_modulate = Color(1, 1, 1, 0.00392157)
+visibility_layer = 3
+position = Vector2(17.1745, -139.12)
+scale = Vector2(7.96, 7.96)
+texture = ExtResource("28_pdoe3")
+
+[node name="Spaceship" parent="." node_paths=PackedStringArray("trajectory") instance=ExtResource("2_dnrjg")]
+position = Vector2(-9005, 10713)
+rotation = 0.200713
+trajectory = NodePath("../Line2D")
+can_control = false
+
 [node name="Player" parent="." groups=["player"] instance=ExtResource("2_qrkjm")]
-position = Vector2(1276, 1443)
+position = Vector2(-9776, 10995)
+rotation = -0.253073
 mass = 0.001
 vertical_thrust = 0.07
 horizontal_thrust = 0.5
@@ -511,6 +828,33 @@ default_color = Color(1, 1, 1, 0.00392157)
 
 [connection signal="body_entered" from="Earth/MoonPivot/Moon/GravityField" to="Earth/MoonPivot/Moon/GravityField" method="_on_gravity_field_body_entered"]
 [connection signal="body_exited" from="Earth/MoonPivot/Moon/GravityField" to="Earth/MoonPivot/Moon/GravityField" method="_on_gravity_field_body_exited"]
+[connection signal="body_entered" from="Earth/Tip1" to="Earth/Tip1/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Earth/Tip1" to="Earth/Tip1/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Earth/Tip1" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Earth/Tip1" to="Earth/Tip1/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Golf/Tip2" to="Golf/Tip2/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Golf/Tip2" to="Golf/Tip2/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Golf/Tip2" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Golf/Tip2" to="Golf/Tip2/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Duck/Tip3" to="Duck/Tip3/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Duck/Tip3" to="Duck/Tip3/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Duck/Tip3" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Duck/Tip3" to="Duck/Tip3/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Spaghetti/Tip4" to="Spaghetti/Tip4/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Spaghetti/Tip4" to="Spaghetti/Tip4/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Spaghetti/Tip4" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Spaghetti/Tip4" to="Spaghetti/Tip4/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Popcorn/Tip5" to="Popcorn/Tip5/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Popcorn/Tip5" to="Popcorn/Tip5/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Popcorn/Tip5" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Popcorn/Tip5" to="Popcorn/Tip5/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Mic/Tip6" to="Mic/Tip6/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Mic/Tip6" to="Mic/Tip6/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_started" from="Mic/Tip6" to="SaveManager" method="save"]
+[connection signal="on_interacted" from="Mic/Tip6" to="Mic/Tip6/NextUnlocker" method="_on_dialog_interacted"]
+[connection signal="body_entered" from="Head/Tip7" to="Head/Tip7/Sprite2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Head/Tip7" to="Head/Tip7/Sprite2D" method="_on_body_exited"]
+[connection signal="on_dialog_finished" from="Head/Tip7" to="SaveManager" method="save"]
+[connection signal="on_dialog_finished" from="Head/Tip7" to="Head" method="_on_tip_dialog_finished"]
 [connection signal="on_ship_entered" from="Spaceship" to="ShipUI" method="_on_spaceship_entered"]
 [connection signal="on_ship_exited" from="Spaceship" to="ShipUI" method="_on_spaceship_exited"]
-[connection signal="on_interacted" from="DialogInteractable" to="DialogInteractable/NextUnlocker" method="_on_dialog_interacted"]

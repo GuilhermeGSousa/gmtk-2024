@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bhuq3pypqjjo7"]
+[gd_scene load_steps=8 format=3 uid="uid://bhuq3pypqjjo7"]
 
 [ext_resource type="Script" path="res://game/gravity_field.gd" id="1_qhbq1"]
 [ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="2_cqp80"]
@@ -21,10 +21,6 @@ shader_parameter/normal_offset = 1.5
 shader_parameter/time_influence = 3.0
 shader_parameter/time_offset = 3.0
 shader_parameter/y_div = 7.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2ibb1"]
-radius = 1587.0
-height = 3826.0
 
 [node name="Earth" type="StaticBody2D"]
 visibility_layer = 3
@@ -51,10 +47,8 @@ visibility_layer = 3
 material = SubResource("ShaderMaterial_5hk3l")
 texture = ExtResource("3_ncs40")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(204, -276)
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_2ibb1")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-428, -1886, -684, -1806, -922, -1693, -1177, -1538, -1332, -1383, -1533, -1099, -1707, -674, -1772, -385, -1784, -79, -1712, 255, -1634, 453, -1532, 648, -1281, 942, -924, 1195, -614, 1339, -186, 1432, 42, 1451, 288, 1442, 501, 1406, 837, 1321, 1075, 1244, 1372, 1122, 1596, 997, 1841, 814, 2069, 536, 2129, 421, 2182, 279, 2228, 22, 2216, -313, 2148, -619, 1972, -1037, 1710, -1392, 1452, -1652, 1075, -1834, 606, -1953, 347, -1989, 49, -1977)
 
 [connection signal="body_entered" from="GravityField" to="GravityField" method="_on_gravity_field_body_entered"]
 [connection signal="body_exited" from="GravityField" to="GravityField" method="_on_gravity_field_body_exited"]

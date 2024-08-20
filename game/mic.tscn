@@ -1,0 +1,129 @@
+[gd_scene load_steps=13 format=3 uid="uid://cnjc1og1q58id"]
+
+[ext_resource type="Script" path="res://game/gravity_field.gd" id="1_r4h4n"]
+[ext_resource type="Texture2D" uid="uid://cdmrhlos63ayk" path="res://game/assets/microbehind.PNG" id="2_wteqe"]
+[ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="3_ay22i"]
+[ext_resource type="Texture2D" uid="uid://cct0itlmadrjx" path="res://game/assets/micro.PNG" id="4_cknsi"]
+[ext_resource type="Script" path="res://game/moon_pivot.gd" id="5_wk0ru"]
+[ext_resource type="Texture2D" uid="uid://cbgjierucvigo" path="res://game/assets/babymicro01.PNG" id="6_xphwv"]
+[ext_resource type="Texture2D" uid="uid://dn4t02aivjyin" path="res://game/assets/babymicro02.PNG" id="7_o0be8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_knise"]
+radius = 6000.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y8gis"]
+shader = ExtResource("3_ay22i")
+shader_parameter/normal_offset = 6.1
+shader_parameter/time_influence = 1.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c7ogk"]
+size = Vector2(583.086, 2688.89)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ajjcc"]
+radius = 590.448
+height = 1664.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cya6y"]
+radius = 233.75
+
+[node name="Mic" type="StaticBody2D"]
+visibility_layer = 3
+position = Vector2(-12820, -20388)
+collision_layer = 8
+
+[node name="GravityField" type="Area2D" parent="."]
+position = Vector2(257, 555)
+collision_layer = 8
+script = ExtResource("1_r4h4n")
+planet_gravity_acceleration = 20
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GravityField"]
+scale = Vector2(0.985888, 0.995109)
+shape = SubResource("CircleShape2D_knise")
+debug_color = Color(0.668341, 0.311278, 1, 0.42)
+
+[node name="Bg" type="Sprite2D" parent="."]
+texture = ExtResource("2_wteqe")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+texture = ExtResource("4_cknsi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(195.441, 591.557)
+rotation = -0.532325
+shape = SubResource("RectangleShape2D_c7ogk")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2(-847, -1164)
+rotation = -0.485528
+shape = SubResource("CapsuleShape2D_ajjcc")
+
+[node name="BallPivot" type="Node2D" parent="."]
+visibility_layer = 3
+position = Vector2(-17, 0)
+script = ExtResource("5_wk0ru")
+rotation_speed = 5.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot"]
+visibility_layer = 3
+position = Vector2(5260, -540)
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(-72, 304)
+texture = ExtResource("6_xphwv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot/StaticBody2D"]
+position = Vector2(-51, 295)
+shape = SubResource("CircleShape2D_cya6y")
+
+[node name="BallPivot2" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_wk0ru")
+rotation_speed = -4.5
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot2"]
+visibility_layer = 3
+position = Vector2(-3803, -179)
+rotation = 0.88708
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot2/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(-24, -368)
+texture = ExtResource("7_o0be8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot2/StaticBody2D"]
+position = Vector2(-3.84483, -372.055)
+shape = SubResource("CircleShape2D_cya6y")
+
+[node name="BallPivot3" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_wk0ru")
+rotation_speed = 4.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot3"]
+visibility_layer = 3
+position = Vector2(710, 4558)
+rotation = -0.96459
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot3/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(0, 16)
+texture = ExtResource("6_xphwv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot3/StaticBody2D"]
+position = Vector2(-25.0378, 11.2742)
+shape = SubResource("CircleShape2D_cya6y")
+
+[connection signal="body_entered" from="GravityField" to="GravityField" method="_on_gravity_field_body_entered"]
+[connection signal="body_exited" from="GravityField" to="GravityField" method="_on_gravity_field_body_exited"]

@@ -1,0 +1,135 @@
+[gd_scene load_steps=10 format=3 uid="uid://duycprfy4bjng"]
+
+[ext_resource type="Script" path="res://game/gravity_field.gd" id="1_a5hyq"]
+[ext_resource type="Texture2D" uid="uid://w0fb3gy0bc4g" path="res://game/assets/duck behind.PNG" id="2_ed8um"]
+[ext_resource type="Shader" path="res://game/wobble_shader.gdshader" id="3_rn71h"]
+[ext_resource type="Texture2D" uid="uid://do50or42oojpt" path="res://game/assets/duck.PNG" id="4_qinh3"]
+[ext_resource type="Script" path="res://game/moon_pivot.gd" id="5_sdmtb"]
+[ext_resource type="Texture2D" uid="uid://t7gtrpde1m2s" path="res://game/assets/baby duck.PNG" id="6_8r0l0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_knise"]
+radius = 6000.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y8gis"]
+shader = ExtResource("3_rn71h")
+shader_parameter/normal_offset = 6.1
+shader_parameter/time_influence = 1.0
+shader_parameter/time_offset = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cya6y"]
+radius = 382.87
+
+[node name="Duck" type="StaticBody2D"]
+visibility_layer = 3
+position = Vector2(325, -14556)
+collision_layer = 8
+
+[node name="GravityField" type="Area2D" parent="."]
+position = Vector2(200, -276)
+collision_layer = 8
+script = ExtResource("1_a5hyq")
+planet_gravity_acceleration = 20
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GravityField"]
+scale = Vector2(0.985888, 0.995109)
+shape = SubResource("CircleShape2D_knise")
+debug_color = Color(0.668341, 0.311278, 1, 0.42)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-96, -1303, -77, -1495, 183, -1884, 538, -2190, 723, -2586, 734, -2817, 557, -3089, 157, -3175, -172, -3085, -398, -2956, -621, -2911, -946, -2968, -1040, -2907, -976, -2790, -311, -2568, -77, -2401, -81, -2345, -266, -2201, -610, -1862, -713, -1736, -773, -1630, -880, -1551, -1042, -1380, -1215, -1073, -1351, -749, -1339, -278, -1091, 140, -647, 585, -461, 820, -38, 1084, 809, 1184, 1351, 1020, 2260, 426, 2402, 197, 2324, -7, 2165, -43, 1981, -152, 1644, 9, 1089, -672, -45, -1180)
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(881, -1296)
+texture = ExtResource("2_ed8um")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(881, -1296)
+texture = ExtResource("4_qinh3")
+
+[node name="BallPivot" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_sdmtb")
+rotation_speed = 3.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot"]
+visibility_layer = 3
+position = Vector2(4596, 812)
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(-72, 304)
+texture = ExtResource("6_8r0l0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot/StaticBody2D"]
+position = Vector2(-59, 373)
+shape = SubResource("CircleShape2D_cya6y")
+
+[node name="BallPivot2" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_sdmtb")
+rotation_speed = 2.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot2"]
+visibility_layer = 3
+position = Vector2(944, 4300)
+rotation = 0.88708
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot2/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(-24, -368)
+texture = ExtResource("6_8r0l0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot2/StaticBody2D"]
+position = Vector2(28.1404, -316.324)
+shape = SubResource("CircleShape2D_cya6y")
+
+[node name="BallPivot3" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_sdmtb")
+rotation_speed = 2.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot3"]
+visibility_layer = 3
+position = Vector2(-3965, 1587)
+rotation = -0.96459
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot3/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+position = Vector2(0, 16)
+texture = ExtResource("6_8r0l0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot3/StaticBody2D"]
+position = Vector2(12.6972, 72.724)
+shape = SubResource("CircleShape2D_cya6y")
+
+[node name="BallPivot4" type="Node2D" parent="."]
+visibility_layer = 3
+script = ExtResource("5_sdmtb")
+rotation_speed = 2.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BallPivot4"]
+visibility_layer = 3
+position = Vector2(-3735, -4084)
+rotation = -2.40871
+collision_layer = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="BallPivot4/StaticBody2D"]
+visibility_layer = 3
+material = SubResource("ShaderMaterial_y8gis")
+texture = ExtResource("6_8r0l0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallPivot4/StaticBody2D"]
+position = Vector2(-25.1184, 73.7365)
+shape = SubResource("CircleShape2D_cya6y")
+
+[connection signal="body_entered" from="GravityField" to="GravityField" method="_on_gravity_field_body_entered"]
+[connection signal="body_exited" from="GravityField" to="GravityField" method="_on_gravity_field_body_exited"]

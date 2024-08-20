@@ -6,7 +6,7 @@ uniform vec4 trajectory_color : source_color;
 
 void fragment() {
 	vec4 c = texture(TEXTURE, UV);
-	
+
 	if(c.a <= 0.0)
 	{
 		COLOR = background_color;

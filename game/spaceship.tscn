@@ -21,10 +21,7 @@ shader_parameter/time_offset = 0.0
 shader_parameter/y_div = 2.87
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hl1rg"]
-size = Vector2(481, 614)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5vqt"]
-size = Vector2(304.75, 312)
+size = Vector2(482.37, 614)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qq6uo"]
 shader = ExtResource("1_vgrp3")
@@ -35,11 +32,14 @@ shader_parameter/normal_offset = 6.7
 shader_parameter/time_influence = 1.0
 shader_parameter/y_div = 2.87
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i5vqt"]
+size = Vector2(305, 365)
+
 [node name="Spaceship" type="RigidBody2D" groups=["Saveable"]]
 z_as_relative = false
 position = Vector2(424, 406)
 collision_mask = 8
-mass = 0.1
+mass = 0.05
 physics_material_override = SubResource("PhysicsMaterial_70m8o")
 gravity_scale = 0.0
 contact_monitor = true
@@ -67,10 +67,6 @@ script = ExtResource("2_xb55d")
 position = Vector2(-6.5, -4)
 shape = SubResource("RectangleShape2D_hl1rg")
 debug_color = Color(0.69477, 0.477986, 0.363519, 0.42)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4.375, 96)
-shape = SubResource("RectangleShape2D_i5vqt")
 
 [node name="FrontShip" type="Sprite2D" parent="."]
 z_index = 3
@@ -120,6 +116,10 @@ bus = &"SFX"
 
 [node name="ExplosionSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_wkiug")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 122.5)
+shape = SubResource("RectangleShape2D_i5vqt")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="on_interacted" from="EnterShip" to="." method="_on_enter_ship"]

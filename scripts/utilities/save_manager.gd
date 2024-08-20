@@ -8,6 +8,8 @@ const SAVE_GROUP = "Saveable"
 @export var load_transition : PackedScene
 @export var is_paused : BoolReference
 
+signal on_game_saved
+
 func has_save_file() -> bool:
 	return FileAccess.file_exists("user://save_game.dat")
 
@@ -22,6 +24,8 @@ func save_game():
 	
 	var file = FileAccess.open("user://save_game.dat", FileAccess.WRITE)
 	file.store_var(data)
+	
+	on_game_saved.emit()
 	
 func load_game():
 	is_paused.value = false
